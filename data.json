@@ -1,0 +1,14 @@
+{
+    "C123": {
+      "customer_name": "Ravi Kumar",
+      "total_due": 8400,
+      "due_date": "2025-01-15",
+      "dpd": 32
+    },
+    "C456": {
+      "customer_name": "Aditi Sharma",
+      "total_due": 15200,
+      "due_date": "2025-02-01",
+      "dpd": 5
+    }
+  }
