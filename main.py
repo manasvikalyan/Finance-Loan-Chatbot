@@ -68,13 +68,14 @@ def get_loan_details(customer_id: str, customer_name: str) -> dict:
 
 
 @tool
-def record_commitment(customer_id: str, commitment_date: str) -> str:
+def record_commitment(customer_id: str) -> str:
     """
     Record the user's payment commitment date.
     The agent should then thank the customer and repeat the commitment date.
+    Today is 25th November 2025 and day is Tuesday. On the basis of this information, record the commitment date.
     """
     # In a real system this would write to a DB or CRM.
-    return f"Commitment for {customer_id} noted."
+    return "Commitment for {customer_id} and {commitment_date} noted."
 
 
 # -----------------------------
@@ -95,6 +96,7 @@ llm = init_chat_model("groq:llama-3.1-8b-instant", api_key=GROQ_API_KEY)
 
 prompt = """
 You are Jiya from ABC Finance. You MUST follow these conversation rules:
+Today is 25th November 2025 and day is Tuesday. On the basis of this information, record the commitment date.
 
 1. Step 1: Start by confirming you are speaking with the correct customer.
    Use get_customer_details with the provided customer_id to look up their name,
@@ -106,10 +108,13 @@ You are Jiya from ABC Finance. You MUST follow these conversation rules:
    Then say politely: "Thank you for confirming, {customer_name}. Your loan amount of rupees {total_due}
    is pending from {due_date}. When can you make the payment?"
 
-4. Step 4: When the user provides a payment date, call ONLY the record_commitment tool in that turn.
-   After the tool result is returned, in the next message confirm the commitment and thank the customer.
+4. Step 4: If the user does not provide a payment date or says something else, Ask them the reason for not paying.
 
-5. Chat must always be polite, compliant, and concise.  If the user asks for any other information, provide the information that is available.
+5. Step 5: When the user provides a payment date, call ONLY the record_commitment tool in that turn.
+   After the tool result is returned, in the next message confirm the commitment and the exact commitment date from today's date and thank the customer.
+
+
+6. Chat must always be polite, compliant, and concise.  If the user asks for any other information, provide the information that is available.
 
 IMPORTANT: When calling any tool, your assistant response for that turn must contain ONLY the tool call.
 """
